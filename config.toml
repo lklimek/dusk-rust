@@ -1,0 +1,20 @@
+change-id = 125535
+
+[llvm]
+download-ci-llvm = true
+
+[build]
+target = ["wasm32-unknown-unknown", "wasm64-unknown-unknown"]
+docs = false
+extended = true
+
+[rust]
+channel = "nightly"
+description = "Dusk Network's Smart Contract Compiler"
+
+download-rustc = true
+lld = true
+
+[dist]
+compression-formats = ["gz"]
+compression-profile = "best"
