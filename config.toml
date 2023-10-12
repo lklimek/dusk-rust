@@ -1,0 +1,28 @@
+# This is to keep track of when the config was last updated
+change-id = 115898
+
+[build]
+# We want a full stage 2 build, with all the optimizations from nightly
+build-stage = 2
+test-stage = 2
+doc-stage = 2
+
+# We want all the tools
+extended = true
+
+# These are the two platforms for which we support building contracts
+target = ["wasm32-unknown-unknown", "wasm64-unknown-unknown"]
+
+# If a build of LLVM is available for the CI use it
+[llvm]
+download-ci-llvm = "if-available"
+
+[rust]
+# We have several defaults in bootstrap that depend on whether the channel
+# is `dev` (e.g. `omit-git-hash` and `download-ci-llvm`). We ensure they don't
+# get set by using nightly
+channel = "nightly"
+download-rustc = false
+
+# Required for WASM targets
+lld = true
