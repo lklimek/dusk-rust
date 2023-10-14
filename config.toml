@@ -4,10 +4,15 @@ change-id = 115898
 [build]
 # We want a full stage 2 build, with all the optimizations from nightly
 build-stage = 2
-test-stage = 2
-doc-stage = 2
+dist-stage = 2
 
-# We want all the tools
+# But we don't need to run tests or build docs
+docs = false
+
+test-stage = 0
+doc-stage = 0
+
+# We want all the tools available
 extended = true
 
 # These are the two platforms for which we support building contracts
@@ -26,3 +31,8 @@ download-rustc = false
 
 # Required for WASM targets
 lld = true
+
+[dist]
+compression-formats = ["gz"]
+# fast, balanced, best
+compression-profile = "balanced"
