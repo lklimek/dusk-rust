@@ -1,0 +1,60 @@
+# Instructions for GitHub to build Dusk's smart contract compilers.
+
+on:
+  pull_request:
+  push:
+    tags:
+      - "v*.*.*"
+    branches:
+      - master
+
+name: Dusk Contract Compilers
+
+jobs:
+  target:
+    strategy:
+      matrix:
+        target: [
+          x86_64-unknown-linux-gnu,
+          x86_64-apple-darwin,
+          aarch64-apple-darwin,
+        ]
+        include:
+          - os: ubuntu-latest
+            target: x86_64-unknown-linux-gnu
+          - os: macos-latest-large
+            target: x86_64-apple-darwin
+          - os: macos-latest-xlarge
+            target: aarch64-apple-darwin
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 16
+
+      - name: Install dependencies
+        if: matrix.os == 'ubuntu-latest'
+        run: sudo apt update && sudo apt install -y ninja-build
+
+      - name: Install dependencies
+        if: matrix.os == 'macos-latest'
+        run: brew install ninja openssl@3
+
+      - name: Run build
+        run: ./x.py dist --host ${{ matrix.target }}
+
+      - name: Set artifact name
+        id: artifact-name
+        run: |
+          if [ "${{ github.ref_type }}" == "tag" ]; then
+            echo "name=duskc-${{ matrix.target }}-${{ github.ref_name }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "name=duskc-${{ matrix.target }}-${{ github.sha }}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Upload build
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ steps.artifact-name.outputs.name }}
+          path: build/dist/
