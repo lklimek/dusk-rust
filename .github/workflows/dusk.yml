@@ -45,7 +45,7 @@ jobs:
 
       - name: Generate configuration
         run: |
-          HOST={{ matrix.target }} envsubst < config.template.toml > config.toml &&
+          HOST=${{ matrix.target }} envsubst < config.template.toml > config.toml &&
           cat config.toml
 
       - name: Run build
