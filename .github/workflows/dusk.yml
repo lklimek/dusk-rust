@@ -39,10 +39,17 @@ jobs:
 
       - name: Setup dependencies
         if: startsWith(matrix.os, 'macos')
-        run: brew install ninja
+        run: |
+          brew install ninja gettext &&
+          brew link --force gettext
+
+      - name: Generate configuration
+        run: |
+          HOST={{ matrix.target }} envsubst < config.template.toml > config.toml &&
+          cat config.toml
 
       - name: Run build
-        run: ./x.py dist --host ${{ matrix.target }}
+        run: ./x.py dist
 
       - name: Set artifact name
         id: artifact-name
