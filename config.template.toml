@@ -4,7 +4,7 @@ change-id = 125535
 download-ci-llvm = true
 
 [build]
-host = "${HOST}"
+host = [ "${HOST}" ]
 target = [
     "${HOST}",
     "wasm32-unknown-unknown",
