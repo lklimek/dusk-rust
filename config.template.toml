@@ -17,7 +17,6 @@ extended = true
 channel = "nightly"
 description = "Dusk Network's Smart Contract Compiler"
 
-download-rustc = true
 lld = true
 
 [dist]
